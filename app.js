@@ -7,9 +7,12 @@ var bodyParser = require('body-parser');
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/dydiy-things');
+var passport = require('passport');
+var session = require('express-session');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+//var routes = require('./routes/index');
+//var users = require('./routes/users');
+//var myThings = require('./routes/mythings');
 
 var app = express();
 
@@ -23,7 +26,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+//commenting out passport until complete
+//app.use(session({secret: 'didyoufuckingdoityet'}));
+//app.use(passport.initialize());
+//app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){
@@ -31,8 +37,13 @@ app.use(function(req,res,next){
 	next();
 });
 
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var myThings = require('./routes/mythings');
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/mythings', myThings);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
