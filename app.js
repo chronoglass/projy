@@ -9,11 +9,6 @@ var monk = require('monk');
 var db = monk('localhost:27017/dydiy-things');
 var passport = require('passport');
 var session = require('express-session');
-
-//var routes = require('./routes/index');
-//var users = require('./routes/users');
-//var myThings = require('./routes/mythings');
-
 var app = express();
 
 // view engine setup
@@ -38,12 +33,16 @@ app.use(function(req,res,next){
 });
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var myThings = require('./routes/mythings');
+var users = require('./routes/u');
+var things = require('./routes/things');
+var api = require('./routes/api');
+var admin = require('./routes/a');
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/mythings', myThings);
+app.use('/u', users);
+app.use('/things', things);
+app.use('/api', api);
+app.use('/a', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

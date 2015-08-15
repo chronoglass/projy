@@ -9,11 +9,11 @@ $(document).ready(function() {
 
 function populateTable(){
   var tableContent = '';
-  $.getJSON( '/users/userlist', function( data ){
+  $.getJSON( '/api/u/all', function( data ){
     userListData = data;
     $.each(data, function() {
       tableContent += '<tr>';
-      tableContent += '<td><a href="#" class="linkshowuser" rel="'+this.name+'">' + this.name + '</a></td>';
+      tableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
       tableContent += '<td>' + this.email + '</td>';
       tableContent += '<td>' + this.userlevel + '</td>';
       tableContent += '<td><a href="#" class="linkdeleteuser" rel="'+this._id+'">delete</a></td>';
@@ -43,7 +43,7 @@ function addUser(event){
 
   if(errorNum === 0){
     var newUser = {
-      'name': $('#addUser fieldset input#inputUserName').val(),
+      'nickname': $('#addUser fieldset input#inputUserName').val(),
       'email': $('#addUser fieldset input#inputUserEmail').val(),
       'userlevel': '5',
     }
@@ -51,7 +51,7 @@ function addUser(event){
     $.ajax({
       type: 'POST',
       data: newUser,
-      url: '/users/adduser',
+      url: '/api/u/adduser',
       dataType: 'JSON'
     }).done(function(response){
       if(response.msg === ''){
@@ -78,7 +78,7 @@ function deleteUser(event){
   if(confirmation === true){
     $.ajax({
       type: 'DELETE',
-      url: '/users/deleteuser/' + $(this).attr('rel')
+      url: '/api/u/deleteuser/' + $(this).attr('rel')
     }).done(function(response){
       if(response.msg === ''){
         console.log('no err');
