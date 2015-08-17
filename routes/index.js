@@ -6,14 +6,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Did You Do it Yet?' });
 });
 
-router.get('/tags', function(req, res){
-	var db = req.db;
-	var collection = db.get('tagTypes');
-	collection.find({},{},function(e,docs){
-		res.render('tags', {
-			"tags" : docs
-		});
-	});
+router.post('/signin', function(req, res){
+  res.redirect("/u/" + req.body.username);
 });
 
 router.get('/signup', function(req, res){

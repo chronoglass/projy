@@ -69,6 +69,7 @@ users
 
 things
 //not yet implimented
+-ownerid
 -title
 -description
 -tree parent

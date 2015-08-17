@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var authorized=true;
 /* 
 GET all my things listing in JSON. 
 TODO: limit number of things
@@ -10,12 +10,12 @@ router.get('/', function(req, res, next) {
   res.redirect("/");
 });
 
-router.get('/all', function(req, res, next) {
-  var db = req.db;
-  var collection = db.get('Users');
-  collection.find({},{},function(e,docs){
-    res.json(docs);
-  });
+router.get('/:id', function(req, res){
+  if(authorized){
+    res.render('uindex', { title: req.params.id });
+  } else {
+    res.send("Unaothorized access for " + req.params.id);
+  }
 });
 
 /* 
@@ -24,32 +24,6 @@ TODO: limit number of things
 TODO: require api key
 TODO: add error handling
 */
-router.get('/api/:id', function(req, res, next) {
-  var db = req.db;
-  var collection = db.get('userThings');
-  var itemToReturn = req.params.id;
-  collection.find({'_id' : itemToReturn},{},function(e,docs){
-    res.json(docs);
-  });
-});
 
-router.post('/adduser', function(req, res){
-  var db = req.db;
-  var collection = db.get('Users');
-  collection.insert(req.body, function(err, result){
-    res.send(
-      (err === null) ? {msg: ''} : {msg: err}
-    );
-  });
-});
-
-router.delete('/deleteuser/:id', function(req, res){
-  var db = req.db;
-  var collection = db.get('Users');
-  var userToDelete = req.params.id;
-  collection.remove({'_id' : userToDelete}, function(err){
-    res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
-  });
-});
 
 module.exports = router;
