@@ -8,15 +8,10 @@ var authorized = true;
 
 router.get('/', function(req, res, next) {
   if(authorized){
-    res.send("No admin for you!");
+    res.render('admin', {title: 'DYDIY admin panel'})
   }
 });
 
-router.get('/users', function(req, res){
-  if(authorized){
-    res.render('useradmin', {title: 'User List'})
-  }
-});
 
 /*
 function for filling the database with test data

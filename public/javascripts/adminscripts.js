@@ -2,28 +2,41 @@ var userListData = [];
 var thingListData = [];
 
 $(document).ready(function() {
-  populateTable();
+  populateTables();
   $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
   $('#btnAddUser').on('click', addUser);
   $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
+  $('#btnUserPanel').on('click', flip(0));
+  $('#btnThingPanel').on('click', flip(1));
 });
 
-function populateTable(){
-  var tableContent = '';
+function populateTables(){
+  var utableContent = '';
   $.getJSON( '/api/u/all', function( data ){
     userListData = data;
     $.each(data, function() {
-      tableContent += '<tr>';
-      tableContent += '<td>' + this.nameFirst + '</td>';
-      tableContent += '<td>' + this.nameLast + '</td>';
-      tableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
-      tableContent += '<td>' + this.email + '</td>';
-      tableContent += '<td>' + this.location + '</td>';
-      tableContent += '<td>' + this.userlevel + '</td>';
-      tableContent += '<td><a href="#" class="linkdeleteuser" rel="'+this._id+'">delete</a></td>';
-      tableContent += '</tr>';
+      utableContent += '<tr>';
+      utableContent += '<td>' + this.nameFirst + '</td>';
+      utableContent += '<td>' + this.nameLast + '</td>';
+      utableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
+      utableContent += '<td>' + this.email + '</td>';
+      utableContent += '<td>' + this.location + '</td>';
+      utableContent += '<td>' + this.userlevel + '</td>';
+      utableContent += '<td><a href="#" class="linkdeleteuser" rel="'+this._id+'">delete</a></td>';
+      utableContent += '</tr>';
     }); 
-    $('#userList table tbody').html(tableContent);
+    $('#userList table tbody').html(utableContent);
+  });
+  var ttableContent = '';
+  $.getJSON( '/api/thing/all', function( data ){
+    thingListData = data;
+    $.each(data, function() {
+      ttableContent += '<tr>';
+      ttableContent += '<td><a href="#" class="linkshowthing" rel="'+this.title+'">' + this.title + '</a></td>';
+      ttableContent += '<td><a href="#" class="linkdeletething" rel="'+this._id+'">delete</a></td>';
+      ttableContent += '</tr>';
+    }); 
+    $('#adminThingList table tbody').html(ttableContent);
   });
 };
 
@@ -49,9 +62,13 @@ function addUser(event){
 
   if(errorNum === 0){
     var newUser = {
-      'nickname': $('#addUser fieldset input#inputUserName').val(),
+      'nickname': $('#addUser fieldset input#inputUserNick').val(),
+      'nameFirst': $('#addUser fieldset input#inputUserNameFirst').val(),
+      'nameLast': $('#addUser fieldset input#inputUserNameLast').val(),
       'email': $('#addUser fieldset input#inputUserEmail').val(),
+      'location': $('#addUser fieldset input#inputUserLoc').val(),
       'userlevel': '5',
+      'pwd': $('#addUser fieldset input#inputUserPwd').val(),
     }
     
     $.ajax({
@@ -63,7 +80,7 @@ function addUser(event){
       if(response.msg === ''){
         // blank response = no problem so clear input fields
         $('#addUser fieldset input').val('');
-        populateTable();
+        populateTables();
       } else {
         //if something went wrong sent error as alert
         alert('Error: ' + response.msg);
@@ -91,9 +108,30 @@ function deleteUser(event){
       }else{
         alert('Error: ' + response.msg);
       }
-      populateTable();
+      populateTables();
     });
   } else {
     return false;
   }
 };
+
+//flip admin panels
+function flip(pos){
+	switch (pos){
+	  case 0:
+	    $('#thingwrapper').hide();
+	    $('#tagwrapper').hide();
+	    $('#userwrapper').show();
+	    break;
+	  case 1:
+	    $('#userwrapper').hide();
+	    $('#tagwrapper').hide();
+	    $('#thingwrapper').show();
+	    break;
+	  case 2:
+	  	$('#userwrapper').hide();
+	    $('#thingwrapper').hide();
+	    $('#tagwrapper').show();
+	    break;
+	}
+}
