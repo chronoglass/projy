@@ -3,8 +3,8 @@ extends layout-admin
 block content
   h1= title
   block panels
-    button#btnUserPanel users
-    button#btnThingPanel things
+    button#btnUserPanel(value=0) Users
+    button#btnThingPanel(value=1) things
     button#btnTagPanel tags
     //wrapper
     #userwrapper

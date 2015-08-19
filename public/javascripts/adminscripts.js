@@ -6,8 +6,8 @@ $(document).ready(function() {
   $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
   $('#btnAddUser').on('click', addUser);
   $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
-  $('#btnUserPanel').on('click', flip(0));
-  $('#btnThingPanel').on('click', flip(1));
+  $('#btnUserPanel').on('click',  flip);
+  $('#btnThingPanel').on('click', flip);
 });
 
 function populateTables(){
@@ -40,6 +40,7 @@ function populateTables(){
   });
 };
 
+/* future functionality to replace populate table with refreshing only the visible table */
 //function updateDisplay();
 
 function showUserInfo(event){
@@ -115,20 +116,24 @@ function deleteUser(event){
   }
 };
 
-//flip admin panels
-function flip(pos){
-	switch (pos){
-	  case 0:
+//flip between admin panels
+function flip(event){
+    event.preventDefault();
+    console.log(this.value);
+	switch (this.value){
+	  case "0":
+	    console.log("Flip to user");
 	    $('#thingwrapper').hide();
 	    $('#tagwrapper').hide();
 	    $('#userwrapper').show();
 	    break;
-	  case 1:
+	  case "1":
+	    console.log("Flip to thing");
 	    $('#userwrapper').hide();
 	    $('#tagwrapper').hide();
 	    $('#thingwrapper').show();
 	    break;
-	  case 2:
+	  case "2":
 	  	$('#userwrapper').hide();
 	    $('#thingwrapper').hide();
 	    $('#tagwrapper').show();
