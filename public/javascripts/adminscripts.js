@@ -28,18 +28,20 @@ function populateTables(){
     $('#userList table tbody').html(utableContent);
   });
   var ttableContent = '';
-  $.getJSON( '/api/thing/all', function( data ){
-    thingListData = data;
-    $.each(data, function() {
+  $.getJSON( '/api/thing/all', function( tdata ){
+    thingListData = tdata;
+    $.each(tdata, function() {
       var that = this;
       //console.log(that);
-      $.getJSON( '/api/u/byid/' + that.ownerid, function( data ){
-        console.log(this);
-        ttableContent += '<tr>';
-        ttableContent += '<td><a href="#" class="linkshowthing" rel="'+that.title+'">' + that.title + '</a></td>';
-        ttableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
-        ttableContent += '<td><a href="#" class="linkdeletething" rel="'+that._id+'">delete</a></td>';
-        ttableContent += '</tr>';
+      $.getJSON( '/api/u/byid/' + that.ownerid, function( tudata ){
+        $.each(tudata, function(){
+          console.log(this);
+          ttableContent += '<tr>';
+          ttableContent += '<td><a href="#" class="linkshowthing" rel="'+that.title+'">' + that.title + '</a></td>';
+          ttableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
+          ttableContent += '<td><a href="#" class="linkdeletething" rel="'+that._id+'">delete</a></td>';
+          ttableContent += '</tr>';
+        });
       });
     }); 
     $('#adminThingList table tbody').html(ttableContent);
