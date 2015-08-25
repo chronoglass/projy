@@ -14,7 +14,7 @@ mongoose.connect('localhost:27017/dydiy-things');
 var passport = require('passport');
 var session = require('express-session');
 var app = express();
-var db = mongoose.connection;
+//var db = mongoose.connection;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -32,16 +32,19 @@ app.use(cookieParser());
 //app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
 app.use(function(req,res,next){
 	req.db = db;
 	next();
-});
+}); 
+*/
 
 var routes = require('./routes/index');
 var users = require('./routes/u');
 var things = require('./routes/things');
 var api = require('./routes/api');
 var admin = require('./routes/a');
+//var schema = require('./schema/schema');
 
 app.use('/', routes);
 app.use('/u', users);

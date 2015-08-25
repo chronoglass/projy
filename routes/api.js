@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var ObjectId = require('mongodb').ObjectID;
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var schema = require('../schema/users');
+//var user = require('mongoose').model('user').schema;
+var db = mongoose.connection;
 /*
 routes for API calls
 GET all my things listing in JSON. 
@@ -23,12 +29,18 @@ router.get('/', function(req, res, send){
 });
 
 //return all users
+//TODO convert to mongoose
 router.get('/u/all', function(req, res, next) {
   if(authorized){
-    var db = req.db;
-    var collection = db.get('Users');
-    collection.find({},{},function(e,docs){
-      res.json(docs);
+    var users = mongoose.model('user');
+    db.on('error', console.error.bind(console, 'connection error:'));
+    //console.log(users);
+    db.once('open', function(callback){
+      console.log(callback);
+      var collection = db.get('Users');
+      collection.find({},{},function(e,docs){
+        res.json(docs);
+      });
     });
   }
 });
