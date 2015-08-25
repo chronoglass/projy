@@ -28,7 +28,7 @@ router.get('/thing/filltest/:id/:user', function(req, res){
     ucoll.findOne({nickname: userid}).on('success', function(doc){
       if(doc){
         var ownerid = doc._id;
-        console.log(ownerid);
+        //console.log(ownerid);
         var collection = db.get('things');
         num = req.params.id;
         (function fillLoop(){

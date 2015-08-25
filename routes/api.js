@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var ObjectID = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 /*
 routes for API calls
 GET all my things listing in JSON. 
@@ -34,12 +34,13 @@ router.get('/u/all', function(req, res, next) {
 });
 
 //return 1 user document by id
+//TODO: return json, not a json object.. effffff
 router.get('/u/byid/:id', function(req, res, next) {
   if(authorized){
     var db = req.db;
     var collection = db.get('Users');
-    var itemToReturn = req.params.id;
-    collection.find({'_id' : itemToReturn},{},function(e,docs){
+    //var itemToReturn = req.params.id;
+    collection.find({'_id' : new ObjectId(req.params.id)},{},function(e,docs){
       res.json(docs);
     });
   }
@@ -121,7 +122,7 @@ router.get('/thing/u/:id', function(req, res){
     var db = req.db;
     var collection = db.get('things');
     //var userid = new ObjectID(req.params.id);
-    collection.find({'ownerid' : new ObjectID(req.params.id)}, {}, function(e, docs){
+    collection.find({'ownerid' : new ObjectId(req.params.id)}, {}, function(e, docs){
       res.json(docs);
     });
   }

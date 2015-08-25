@@ -7,9 +7,9 @@ a {
 }
 
 #thingwrapper {
-  display: hidden;
+  display: none;
 }
 
 #tagwrapper {
-  display: hidden;
+  display: none;
 }
