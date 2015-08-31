@@ -4,8 +4,8 @@ var ObjectId = require('mongodb').ObjectID;
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var schema = require('../schema/users');
-//var user = require('mongoose').model('user').schema;
+var uschema = require('../schema/users');
+var tschema = require('../schema/things');
 var db = mongoose.connection;
 /*
 routes for API calls
@@ -32,27 +32,20 @@ router.get('/', function(req, res, send){
 //TODO convert to mongoose
 router.get('/u/all', function(req, res, next) {
   if(authorized){
-    var users = mongoose.model('user');
+    var users = uschema;
     db.on('error', console.error.bind(console, 'connection error:'));
-    //console.log(users);
-    db.once('open', function(callback){
-      console.log(callback);
-      var collection = db.get('Users');
-      collection.find({},{},function(e,docs){
-        res.json(docs);
-      });
-    });
-  }
+	users.find(function(err, users){res.json(users)});
+  } else(res.send("bad news"))
 });
 
 //return 1 user document by id
 //TODO: return json, not a json object.. effffff
 router.get('/u/byid/:id', function(req, res, next) {
   if(authorized){
-    var db = req.db;
-    var collection = db.get('Users');
+    var users = uschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
     //var itemToReturn = req.params.id;
-    collection.find({'_id' : new ObjectId(req.params.id)},{},function(e,docs){
+    users.find({'_id' : new ObjectId(req.params.id)},{},function(e,docs){
       res.json(docs);
     });
   }
@@ -61,8 +54,8 @@ router.get('/u/byid/:id', function(req, res, next) {
 //return 1 user document by name
 router.get('/u/byname/:id', function(req, res, next) {
   if(authorized){
-    var db = req.db;
-    var collection = db.get('Users');
+    var collection = uschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
     var itemToReturn = req.params.id;
     collection.find({'nickname' : itemToReturn},{},function(e,docs){
       res.json(docs);
@@ -75,21 +68,19 @@ router.get('/u/byname/:id', function(req, res, next) {
 //TODO: hash password, or verify it IS a hash before committing
 router.post('/u/adduser', function(req, res){
   if(authorized){
-    var db = req.db;
-    var collection = db.get('Users');
-    collection.insert(req.body, function(err, result){
-      res.send(
-        (err === null) ? {msg: ''} : {msg: err}
-      );
-    });
+    var collection = uschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    console.log(req.body);
+    var insRec = new collection(req.body);
+    insRec.save();
   }
 });
 
 //delete user by ID
 router.delete('/u/deleteuser/:id', function(req, res){
   if(authorized){
-    var db = req.db;
-    var collection = db.get('Users');
+    var collection = uschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
     var userToDelete = req.params.id;
     collection.remove({'_id' : userToDelete}, function(err){
       res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
@@ -119,13 +110,13 @@ router.post('/tag/newtag', function(req, res){
   }
 });
 
-//get a list of all things
 router.get('/thing/all', function(req, res, next) {
-  var db = req.db;
-  var collection = db.get('things');
-  collection.find({},{},function(e,docs){
-    res.json(docs);
-  });
+  if(authorized){
+    var things = tschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    console.log("no error");
+	things.find(function(err, things){res.json(things)});
+  } else(res.send("bad news"))
 });
 
 //get a list of a specific users things

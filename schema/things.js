@@ -11,3 +11,4 @@ var thing = new Schema({
   tree:[{type: Schema.Types.ObjectId, ref: 'thing', level: Number}]
 });
 
+module.exports = mongoose.model('thing', thing);
