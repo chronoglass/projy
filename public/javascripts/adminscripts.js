@@ -16,12 +16,16 @@ function populateTables(){
     userListData = data;
     $.each(data, function() {
       utableContent += '<tr>';
-      utableContent += '<td>' + this.nameFirst + '</td>';
-      utableContent += '<td>' + this.nameLast + '</td>';
+      utableContent += '<td>' + this.name.first + '</td>';
+      utableContent += '<td>' + this.name.last + '</td>';
       utableContent += '<td><a href="#" class="linkshowuser" rel="'+this.nickname+'">' + this.nickname + '</a></td>';
       utableContent += '<td>' + this.email + '</td>';
-      utableContent += '<td>' + this.location + '</td>';
-      utableContent += '<td>' + this.userlevel + '</td>';
+      if(!this.location){
+        utableContent += '<td>Not available</td>';
+      }else{
+        utableContent += '<td>' + this.location + '</td>';
+      }
+      utableContent += '<td>' + this.ulevel + '</td>';
       utableContent += '<td><a href="#" class="linkdeleteuser" rel="'+this._id+'">delete</a></td>';
       utableContent += '</tr>';
     }); 

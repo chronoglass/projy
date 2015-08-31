@@ -68,11 +68,25 @@ router.get('/u/byname/:id', function(req, res, next) {
 //TODO: hash password, or verify it IS a hash before committing
 router.post('/u/adduser', function(req, res){
   if(authorized){
+  console.log(req.body);
     var collection = uschema;
     db.on('error', console.error.bind(console, 'connection error:'));
-    console.log(req.body);
-    var insRec = new collection(req.body);
-    insRec.save();
+    var insRec = new collection({
+      nickname: req.body.nickname,
+      name: {
+        first: req.body.nameFirst,
+        last: req.body.nameLast,
+        mi: req.body.nameMI
+        },
+        location: req.body.location,
+        email: req.body.email,
+        ulevel: 5
+    });
+    insRec.validate(function(err){
+      insRec.save(function(err){
+        res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
+      });
+    });
   }
 });
 
