@@ -91,6 +91,7 @@ router.post('/u/adduser', function(req, res){
 });
 
 //delete user by ID
+//TODO also delete things, or at least put in holding state for a predetermined time
 router.delete('/u/deleteuser/:id', function(req, res){
   if(authorized){
     var collection = uschema;
@@ -128,7 +129,6 @@ router.get('/thing/all', function(req, res, next) {
   if(authorized){
     var things = tschema;
     db.on('error', console.error.bind(console, 'connection error:'));
-    console.log("no error");
 	things.find(function(err, things){res.json(things)});
   } else(res.send("bad news"))
 });
@@ -138,7 +138,6 @@ router.get('/thing/u/:id', function(req, res){
   if(authorized){
     var db = req.db;
     var collection = db.get('things');
-    //var userid = new ObjectID(req.params.id);
     collection.find({'ownerid' : new ObjectId(req.params.id)}, {}, function(e, docs){
       res.json(docs);
     });
@@ -146,14 +145,27 @@ router.get('/thing/u/:id', function(req, res){
 });
 
 //add a new thing
+//TODO: map form to entries
 router.post('/thing/newthing', function(req, res){
   if(authorized){
-    var db = req.db;
-    var collection = db.get('things');
-    collection.insert(req.body, function(err, result){
-      res.send(
-        (err === null) ? {msg: ''} : {msg: err}
-      );
+  console.log(req.body);
+    var collection = tschema;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    var insRec = new collection({
+      nickname: req.body.nickname,
+      name: {
+        first: req.body.nameFirst,
+        last: req.body.nameLast,
+        mi: req.body.nameMI
+        },
+        location: req.body.location,
+        email: req.body.email,
+        ulevel: 5
+    });
+    insRec.validate(function(err){
+      insRec.save(function(err){
+        res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
+      });
     });
   }
 });

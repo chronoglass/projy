@@ -10,6 +10,12 @@ run with nodemon www/bin
 localhost:3000
 
 TODO: clean up routes
+TODO: convert to mongoose
+TODO: convert api to swagger or strongloop
+TODO: templates
+TODO: thing entry form
+TODO: authentication
+TODO: session tracking
 
 [******************* file structure ************************]
 
@@ -50,6 +56,17 @@ TODO: clean up routes
 --/thingadd
 --/thingupdate
 
+/schema
+/tags.js
+--tag schema
+/things
+--thing schema
+/users
+--users schema
+/session
+--session schema
+/templates
+--template schema
 
 [******************* data structure ******************]
 
