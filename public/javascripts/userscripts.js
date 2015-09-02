@@ -41,6 +41,7 @@ function showThingDetail(event){
   $('#thingInfoTitle').text(thisThingObject.title);
 }
 
+//current function adds user, not thing
 function newThing(event){
   event.preventDefault();
   

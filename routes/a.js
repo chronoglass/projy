@@ -36,8 +36,7 @@ router.get('/thing/filltest/:num/:user', function(req, res){
           num = numPosts;
           (function fillLoop(){
             if(num > 0){
-              console.log(num);
-              request.post('/api/thing/newthing',
+              request.post('http://localhost:3000/api/thing/newthing',
                 {form: 
                   {"title": "testpost"+num, 
                   "description": "blah blah blah",
@@ -51,6 +50,7 @@ router.get('/thing/filltest/:num/:user', function(req, res){
                   }}, 
                 function(res, e, body){
                   if (!e && res.statusCode == 200) {
+                    console.log("posted");
                     console.log(body)
                   }
                 });

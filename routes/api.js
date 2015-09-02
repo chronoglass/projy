@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var uschema = require('../schema/users');
 var tschema = require('../schema/things');
+
 var db = mongoose.connection;
 /*
 routes for API calls
@@ -148,26 +149,32 @@ router.get('/thing/u/:id', function(req, res){
 //TODO: map form to entries
 router.post('/thing/newthing', function(req, res){
   if(authorized){
-  console.log(req.body);
-    var collection = tschema;
-    db.on('error', console.error.bind(console, 'connection error:'));
-    var insRec = new collection({
-      nickname: req.body.nickname,
-      name: {
-        first: req.body.nameFirst,
-        last: req.body.nameLast,
-        mi: req.body.nameMI
-        },
-        location: req.body.location,
-        email: req.body.email,
-        ulevel: 5
-    });
-    insRec.validate(function(err){
-      insRec.save(function(err){
-        res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
-      });
-    });
+    tschema.addThing(req.body);
+    //res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
   }
 });
 
+/*
+router.post('/thing/newthing', function(req, res){
+  if(authorized){
+    var connect = mongoose.connection;
+    owner = req.body.owner;
+    var trecord = tschema;
+    connect.on('error', console.error.bind(console, 'connection error:'));
+    var insRec = new trecord({
+      title: req.body.title,
+      description: req.body.description,
+      createdon: Date.now(),
+      owner: owner,
+      comments: {body: "", date: ""},
+      tree: {"null": "null", level: 0}
+    });
+    //insRec.validate(function(err){
+      insRec.save(function(err){
+        res.send((err === null) ? {msg: ''} : {msg: 'error: ' + err});
+      });
+    //});
+  }
+});
+*/
 module.exports = router;
